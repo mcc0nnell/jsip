@@ -15,9 +15,18 @@ The inherited Ant build pins `javac.source=1.5` and `javac.target=1.5`. A JDK/bu
 The baseline runner expects:
 
 - JDK 8;
-- Apache Ant;
+- Apache Ant with its JUnit task available;
 - `svnversion` from Subversion, because the inherited build invokes it while generating version metadata; and
 - Git.
+
+The inherited build inputs used by `make` / `runtck` are repository-local and are preflighted by the runner:
+
+- `lib/log4j-1.2.15.jar`
+- `lib/junit-3.8.1.jar`
+- `ant-tasks/lib/ant.jar`
+- `ant-tasks/lib/jdom.jar`
+- `ant-build-config.properties`
+- `tck.properties`
 
 The runner executes:
 
@@ -33,6 +42,18 @@ External CI should preserve, when present:
 - `TIMESTAMP`
 
 The CI system should also bind those artifacts to the tested Git commit and record the toolchain versions used for the run.
+
+### Historical version metadata
+
+`generate-version` runs `svnversion` and then feeds `version.txt` to the inherited `VersionerTask`. A Git checkout is not a Subversion working copy, so that value is not a trustworthy source identity; the historical task may fall back to its legacy numeric default when naming generated artifacts.
+
+For this proving ground, the exact Git commit supplied and independently verified by external CI is authoritative. `version.txt`, `TIMESTAMP`, and legacy versioned JAR names are preserved only as build evidence. They must not be interpreted as revision identity.
+
+### TCK isolation
+
+The inherited TCK self-test binds to loopback and uses fixed SIP ports `5060` and `6050`. The external Jenkins `jsip-jdk8` worker should therefore be configured as a single-executor lane, with no unrelated SIP workload sharing those ports during a run.
+
+The baseline `runtck` target excludes TCP, TLS, and SCTP call-flow tests. Those transports belong in later, explicit interoperability slices rather than being silently folded into the historical baseline.
 
 ## Evidence model
 
