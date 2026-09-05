@@ -1,0 +1,8 @@
+# Raw network evidence and key material are never committed as regression fixtures.
+*.pcap
+*.pcapng
+*.pcap.gz
+*.key
+*.pem
+wiretap*.conf
+wireguard*.conf
