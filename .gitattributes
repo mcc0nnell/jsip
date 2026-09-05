@@ -1,0 +1,2 @@
+# SIP interoperability fixtures are wire-format evidence. Never normalize line endings.
+*.sip -text
