@@ -78,11 +78,17 @@ The proving ground is expected to grow around VRS/iTRS-relevant signaling behavi
 - B2BUA and proxy interaction patterns; and
 - reproducible captures derived from interoperability testing.
 
+## Wiretap boundary
+
+Sandia Wiretap is transport plumbing for reaching a test network path; it is not the canonical SIP recorder or fixture format for this proving ground.
+
+When Wiretap is used, capture or observation happens separately at a controlled lab endpoint. Raw network captures are transient evidence only. A committed regression fixture should contain the smallest sanitized SIP signaling needed to reproduce the behavior, plus enough provenance to relate it to the controlled observation without retaining subscriber data, credentials, production addresses, or unrelated payloads.
+
 ## Scope discipline
 
 The baseline branch must not silently normalize, rewrite, or "improve" observed SIP traffic. Captures and fixtures should preserve the behavior under investigation, with sanitization limited to secrets and personally identifiable information.
 
-Wiretap-derived evidence should be minimized before committing. Do not commit credentials, production identifiers, subscriber data, or raw captures containing sensitive information.
+Evidence gathered over Wiretap-enabled test paths should be minimized before committing. Do not commit WireGuard keys, credentials, production identifiers, subscriber data, or raw captures containing sensitive information.
 
 ## Sequence
 
