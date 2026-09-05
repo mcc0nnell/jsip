@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcc0nnell.org/schemas/jsip/vrs-interop-fixture-v1.json",
+  "title": "JAIN-SIP VRS interoperability fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "description", "transport", "source", "messages"],
+  "properties": {
+    "schema": {
+      "const": "jsip.vrs-interop-fixture/v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transport": {
+      "enum": ["udp", "tcp", "tls", "websocket"]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sanitized"],
+      "properties": {
+        "kind": {
+          "enum": ["controlled-lab", "synthetic"]
+        },
+        "sanitized": {
+          "type": "boolean"
+        },
+        "evidenceSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "captureTool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "version": { "type": "string", "minLength": 1 }
+          }
+        },
+        "networkPath": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "role"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "version": { "type": "string", "minLength": 1 },
+              "role": { "type": "string", "minLength": 1 },
+              "configSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "messages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "direction", "file", "sha256"],
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "direction": {
+            "enum": ["peer-to-sut", "sut-to-peer"]
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+\\.sip$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "deltaMs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "redactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "method", "failureRelevant"],
+        "properties": {
+          "field": { "type": "string", "minLength": 1 },
+          "method": { "type": "string", "minLength": 1 },
+          "failureRelevant": { "const": false },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}
