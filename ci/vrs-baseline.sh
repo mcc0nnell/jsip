@@ -9,12 +9,22 @@ for tool in "${required_tools[@]}"; do
   fi
 done
 
+java_version="$(java -version 2>&1 | head -n 1)"
+javac_version="$(javac -version 2>&1 | head -n 1)"
+if [[ "$java_version" != *'1.8.'* ]] || [[ "$javac_version" != javac\ 1.8.* ]]; then
+  echo "JAIN-SIP baseline requires JDK 8" >&2
+  echo "java: $java_version" >&2
+  echo "javac: $javac_version" >&2
+  exit 2
+fi
+
 echo "== JAIN-SIP VRS baseline =="
 echo "commit: $(git rev-parse HEAD)"
-java -version
-javac -version
+echo "$java_version"
+echo "$javac_version"
 ant -version
 svnversion --version --quiet
+git --version
 
 echo "== build =="
 ant make
