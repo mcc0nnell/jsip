@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mcc0nnell.org/schemas/jsip/vrs-interop-fixture-v1.json",
+  "$id": "urn:jsip:vrs-interop-fixture:v1",
   "title": "JAIN-SIP VRS interoperability fixture",
   "type": "object",
   "additionalProperties": false,
